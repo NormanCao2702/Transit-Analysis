@@ -1,0 +1,48 @@
+Standard file:
+Standard files are part of the GTFS specification,
+which is a universally adopted format for public transportation schedules and associated geographic information.
+
+1. routes.txt:
+This file defines transit routes. A route is a group of trips that are displayed to riders as a single service.
+The columns include identifiers for the route, descriptive names, and visual presentation details such as color.
+
+2. shapes.txt:
+Defines the physical path that a vehicle takes. This file is used to draw lines on a map to represent the routes.
+Points are defined by latitude and longitude coordinates and are ordered to draw the shape.
+
+3. stop_times.txt:
+Specifies the times that a vehicle arrives at and departs from individual stops for each trip.
+This file ties together trips, stops, and the specific timing of stops along a trip.
+
+4. stops.txt:
+Defines all the stopping locations along routes. Stops include various attributes like location, name,
+and amenities (e.g., wheelchair boarding).
+
+5. transfers.txt:
+Provides rules for making connections between different routes at specific stops.
+This can include minimum transfer times to ensure passengers can reliably make transfers.
+
+6. trips.txt:
+Describes trips for each route. A trip is a sequence of two or more stops that occurs at a specific time.
+This file includes details like trip identifiers, service IDs (linking to calendar.txt or calendar_dates.txt for operational days),
+and operational details like wheelchair accessibility.
+
+Non-standard file:
+Non-standard files are not part of the official GTFS specification but may be included by transit agencies or
+dataset providers to convey additional information that is specific to their operations
+
+7. direction_names_exception.txt:
+This non-standard file seems to provide exceptions or specific details about directions for routes,
+including names and possibly operational details based on the direction of travel.
+
+8. directions.txt:
+Another non-standard file that likely maps directions (possibly inbound vs. outbound) to route IDs and short names,
+helping to specify the operational direction of routes.
+
+9. pattern_id.txt:
+This non-standard file seems to associate trips with patterns,
+where a pattern could be a specific path or set of stops that a trip follows, identified by a pattern_id.
+
+10. stops_order_exception.txt:
+A non-standard file likely detailing exceptions to the standard stop order for certain routes or directions.
+This could include special operations or detours that alter the normal sequence of stops.
