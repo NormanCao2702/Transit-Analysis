@@ -29,10 +29,10 @@ CWD = os.getcwd()
 # Function used to calculate the schedualed wait times between departures at 
 # stops. Returns time difference if next stop id and trip id is the same as 
 # current
-def calcWaitTime(nextTime, curTime, nextStop, curStop):#, nextTrip, curTrip):
-    if nextStop == curStop:# and nextTrip == curTrip:
-        diff = nextTime - curTime
-        return diff.total_seconds()
+def calcWaitTime(nextTime, curTime):#, nextTrip, curTrip):
+    
+    diff = nextTime - curTime
+    return diff.total_seconds()
     return np.NaN
 calcWaitTime = np.vectorize(calcWaitTime, otypes=[np.float64])
 
@@ -60,31 +60,39 @@ getTime = np.vectorize(getTime, otypes=[np.datetime64])
 def main():
     # Iterate files
     for file in os.listdir(CWD + STOP_TIME_DIR):
+        # Get city name from filename
         city = getCity(file)
-        print(city)
+        # Get data from csv and put into pandas dataframe
         init_data = pd.read_csv(CWD+STOP_TIME_DIR+file)
+        # Add city name as column
         init_data['city'] = city
+        # Make time variable usable
         init_data['arrival_time'] = getTime(init_data['arrival_time'])
+        # sort data so stops are main priority and times are second priority
         init_data = init_data.sort_values(by=['stop_id', 'arrival_time'], 
                                           ignore_index=True)
+        # Move next time into workable column to avoid iteration
         init_data['next_time'] = init_data['arrival_time'].shift(-1)
         init_data['next_sid'] = init_data['stop_id'].shift(-1)
         init_data['next_tid'] = init_data['trip_id'].shift(-1)
+        print(init_data)
         
+        # Remove rows where current stop id != to next stop id
+        init_data = init_data[init_data['next_sid'] != 'None']
+        init_data.dropna()
+        init_data = init_data[(init_data['stop_id'] == init_data['next_sid'])]
+        init_data = init_data.reset_index(drop=True)
+        print(init_data)
+        
+        # Calculate the wait times at stops between successive busses
         init_data['wait_time'] = calcWaitTime(init_data['next_time'],
-                                              init_data['arrival_time'],
-                                              init_data['next_sid'],
-                                              init_data['stop_id'],
-                                              #init_data['next_tid'],
-                                              #init_data['trip_id']
-                                              )
+                                              init_data['arrival_time'])
         
+        # Check if there is an output director and save csv file to it
         if not os.path.exists(CWD + OUTPUT_DIR):
             os.mkdir(CWD + OUTPUT_DIR)
         init_data.to_csv(CWD + OUTPUT_DIR + f'{city}.csv', 
-                         columns={'city', 'stop_id', 'trip_id', 
-                                  'arrival_time', 'next_time', 
-                                  'wait_time', 'next_sid', 'next_tid'})
+                         columns={'city', 'stop_id', 'next_sid', 'wait_time'})
       
 
 if __name__ == '__main__':
