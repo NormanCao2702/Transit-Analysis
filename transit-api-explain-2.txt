@@ -123,3 +123,177 @@ How to Choose This Endpoint:
     helping users navigate the routes offered by a single operator or within a defined region.
     Performance Optimization: By optionally including latitude and longitude parameters,
     you can improve the efficiency of data retrieval, making this endpoint well-suited for performance-sensitive applications.
+
+Endpoint 8: Stops for a Given Network
+
+This endpoint returns all stops associated with a specific transit network.
+It's essential for applications that need to provide a comprehensive list of boarding
+or alighting points within a particular transit agency's service area,
+enhancing the granularity of transit navigation and planning capabilities.
+Key Parameters:
+
+    1) network_id: The identifier for the transit network from which you want to retrieve stop information.
+    This ID is typically obtained from /public/available_networks.
+    2) lat and lon: Optional coordinates that, if provided, can improve the performance of the API call by focusing on stops that serve a specific location within the network.
+
+Usage:
+
+    + Network-Specific Stop Discovery: Allows users to explore all stops within a particular transit network,
+    aiding in trip planning and access to transit services.
+    + Geographic Optimization: By supplying lat and lon parameters,
+    the API call can be optimized to focus on stops relevant to a specific area, enhancing response times and data relevance.
+
+Responses:
+
+The response includes an array of stops, each with details such as:
+
+    + global_stop_id: A unique identifier for the stop that remains consistent across GTFS updates.
+    + location_type: Indicates whether the stop is a routable stop (0) or an entrance to a station (2), based on GTFS standards.
+    + parent_station_global_stop_id: For stops that are part of a larger station, this field links to the station's global ID.
+    + route_type: Specifies the type of service (bus, rail, etc.) for routable stops, as defined in the GTFS.
+    + stop_lat and stop_lon: The geographic coordinates of the stop.
+    + stop_name and stop_code: The name and code of the stop, providing identifiable information consistent with GTFS data.
+    + wheelchair_boarding: Indicates the level of wheelchair accessibility at the stop.
+
+Example Use Case:
+
+A transit app focuses on providing detailed information for all bus stops operated by "BC Transit West Kootenay."
+By using the network_id obtained from /public/available_networks, the app can list every stop within this network,
+including their locations and accessibility features, facilitating easier navigation for users.
+
+How to Choose This Endpoint:
+
+    Detail-Oriented Stop Information: Ideal for applications requiring exhaustive lists of stops within a specific network,
+    whether for accessibility analysis, stop-based trip planning, or providing users with detailed navigational aids.
+    Performance Considerations: The ability to optimize calls with geographic coordinates makes this endpoint suitable for
+    location-aware applications needing efficient data retrieval.
+
+Endpoint 9: Latest Data Update for Network
+
+This endpoint is designed to inform you about the most recent data update time for a specified transit network.
+It's particularly useful for applications that rely on up-to-date transit data to ensure that users are provided
+with the latest information regarding schedules, route changes, or any other relevant transit updates.
+
+Key Parameters:
+    1) network_id: The unique identifier for the transit network in question.
+    This ID can typically be obtained from the /public/available_networks endpoint.
+    2) lat and lon: Optional geographic coordinates that can enhance the performance of the API call
+    by focusing on a specific area served by the network.
+
+Usage:
+
+    Data Freshness Verification: Enables applications to check the currency of the transit data they are using,
+    ensuring that users have access to the most current information available.
+    Update Triggers: Can be used to trigger data synchronization or updates within an application,
+    based on the time of the last data update for the relevant transit network.
+
+Responses:
+
+The response provides a single piece of information:
+
+    time: The UNIX time (in seconds) indicating when the transit network's data was last updated.
+
+Example Use Case:
+
+A developer is working on a transit scheduling application that features real-time updates and alerts for the
+"BC Transit West Kootenay" network. To ensure the application's transit data is current,
+the developer periodically queries this endpoint with the network's ID to check the last update time.
+If the data within the application is older than the time returned by this endpoint,
+an update process is initiated to fetch the latest data.
+
+How to Choose This Endpoint:
+
+    + Ensuring Data Currency: Essential for applications where the accuracy and timeliness of transit information
+    are critical to user experience and decision-making.
+    + Optimizing Data Requests: By knowing the last update time, applications can reduce unnecessary data requests,
+    fetching new data only when an update has occurred since the last check.
+
+Endpoint 10: Find Transit Stops by Search Term
+
+This endpoint facilitates the search for transit stops based on a given search term within an approximate area defined
+by latitude and longitude coordinates. It matches the search term against both the stop_name and stop_code fields from
+the GTFS data of stops, making it highly useful for users trying to find specific stops or stops near a certain location.
+
+Key Parameters:
+
+    1) lat and lon: These parameters define the geographical area within which the search is conducted,
+    ensuring that the results are relevant to a specific location.
+    2) query: The search term used to find stops. This could be a part of the stop's name,
+    its code, or any other identifying information contained within the stop's GTFS data.
+    3) pickup_dropoff_filter: This filter allows narrowing down the results based on operational characteristics of the stops,
+    such as whether boarding or alighting is allowed.
+    4) max_num_results: Specifies the maximum number of search results to return,
+    allowing for control over the volume of data returned by the API call.
+
+Usage:
+
+    + Stop Discovery: Enables users to find specific stops by name or code, aiding in trip planning and navigation.
+    + Operational Filtering: Offers the ability to filter stops based on whether they are used for pickup, dropoff, or both,
+    providing users with stops that match their specific travel needs.
+
+Responses:
+
+The response includes an array of matching stops, each with details such as:
+
+    + global_stop_id: A unique identifier for the stop.
+    + location_type: The type of location, based on GTFS standards.
+    + match_strength: Indicates how closely the stop matches the search query, with higher values representing better matches.
+    + parent_station_global_stop_id: For stops that are part of a larger station, this ID links to the station's global ID.
+    + route_type: The type of service (bus, rail, etc.) that the stop serves.
+    + stop_lat and stop_lon: The geographic coordinates of the stop.
+    + stop_name: The name of the stop as provided in the GTFS data.
+
+Example Use Case:
+
+A user wants to find all bus stops with "Main Street" in their name within a specific area of the city.
+By setting the lat and lon to the coordinates of the area, and the query to "Main Street,"
+the API call can return a list of all matching stops, helping the user to identify the desired stop for their journey.
+How to Choose This Endpoint:
+
+    Specific Stop Searches: Optimal for when users know part of a stop's name or code and need to find the complete details
+    or location of that stop.
+    Localized Stop Discovery: Useful for narrowing down search results to stops within a specific geographic area,
+    making the search more relevant to the user's current location or area of interest.
+
+Endpoint 11: Get Details for a Trip
+
+This endpoint is designed to provide comprehensive details for a specific trip,
+including scheduled times and stop information throughout the trip's entirety.
+It's an invaluable resource for applications offering in-depth transit route planning and real-time updates to
+enhance user navigation and trip scheduling.
+
+Key Parameters:
+    1) trip_search_key: This is a unique trip identifier that is obtained from other API endpoints,
+    such as /v3/public/stop_departures. This key is essential for fetching the detailed itinerary and stop information for
+    a specific trip. Given the dynamic nature of real-time transit data, this value may change with feed updates,
+    necessitating regular refetching for accuracy.
+
+Usage:
+    + Detailed Trip Planning: Allows users to obtain a detailed view of a specific trip,
+    including each stop along the route and the scheduled departure times, facilitating precise trip planning and scheduling.
+    + Real-Time Trip Information: While the endpoint primarily provides scheduled times,
+    the inclusion of a rt_trip_id indicates the potential for real-time data integration,
+    offering updated trip details as they become available.
+
+Responses:
+
+The response includes detailed information about the trip, encompassing:
+
+    + Route Information: Attributes like global_route_id, route_long_name, route_short_name, route_type, route_color,
+    and route_text_color, providing a full understanding of the trip's route.
+    + Network Branding: Details such as route_network_name and route_network_id,
+    offering insight into the transit network or agency branding associated with the route.
+    + Text-to-Speech Names: tts_long_name and tts_short_name for accessibility features,
+    ensuring the trip and route information is user-friendly for auditory navigation aids.
+    + Stop Details: Information for each stop on the trip, including departure_time and specific stop attributes
+    (location, accessibility, etc.), enabling users to navigate each segment of their trip effectively.
+
+Example Use Case:
+
+A transit app user wants to know all stops and departure times for a specific bus trip they plan to take later in the day. By using the trip_search_key obtained from a previous search (e.g., via stop departures or trip planning), the app can call this endpoint to retrieve and display a detailed itinerary, including exact departure times and stop information, enhancing the user's ability to plan their journey accurately.
+How to Choose This Endpoint:
+
+    In-Depth Itinerary Insights: Select this endpoint when your application's goal is to provide users with detailed,
+    step-by-step information on a particular trip, including all stops and scheduled departures.
+    Integration of Scheduled and Real-Time Data: Ideal for applications aiming to blend scheduled trip details with real-time
+    updates, ensuring that users receive the most accurate and current information available for their planned trips.
