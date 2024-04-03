@@ -58,6 +58,10 @@ getTime = np.vectorize(getTime, otypes=[np.datetime64])
 
 # Main function
 def main():
+    
+    # initializing pandas dataframe
+    data = pd.DataFrame()
+    
     # Iterate files
     for file in os.listdir(CWD + STOP_TIME_DIR):
         # Get city name from filename
@@ -75,24 +79,25 @@ def main():
         init_data['next_time'] = init_data['arrival_time'].shift(-1)
         init_data['next_sid'] = init_data['stop_id'].shift(-1)
         init_data['next_tid'] = init_data['trip_id'].shift(-1)
-        print(init_data)
         
         # Remove rows where current stop id != to next stop id
         init_data = init_data[init_data['next_sid'] != 'None']
         init_data.dropna()
         init_data = init_data[(init_data['stop_id'] == init_data['next_sid'])]
         init_data = init_data.reset_index(drop=True)
-        print(init_data)
         
         # Calculate the wait times at stops between successive busses
         init_data['wait_time'] = calcWaitTime(init_data['next_time'],
                                               init_data['arrival_time'])
+        init_data = init_data[init_data['wait_time'] > 0]
+        init_data = init_data[['city', 'wait_time']]
         
+        data = pd.concat([data, init_data], ignore_index=True)
+        print(data)
         # Check if there is an output director and save csv file to it
-        if not os.path.exists(CWD + OUTPUT_DIR):
-            os.mkdir(CWD + OUTPUT_DIR)
-        init_data.to_csv(CWD + OUTPUT_DIR + f'{city}.csv', 
-                         columns={'city', 'stop_id', 'next_sid', 'wait_time'})
+    if not os.path.exists(CWD + OUTPUT_DIR):
+        os.mkdir(CWD + OUTPUT_DIR)
+    data.to_csv(CWD + OUTPUT_DIR + 'city_wait_times.csv')
       
 
 if __name__ == '__main__':
