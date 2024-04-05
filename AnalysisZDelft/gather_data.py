@@ -7,10 +7,10 @@
 # Program is meant to do the following
 # [1] Opens each CSV text file and puts data into pandas dataframe
 # [2] Add city/transit jurisdiction name column
-# [3] Calculate schedualed wait times for stops dependent on route 
-# [4] Save wanted more usable data to a csv file in an output directory
+# [3] 
+# [4] Save wanted/more usable data to a csv file in an output directory
 # Data files in 'city_stop_data_files' was manually downloaded from the 
-# following sources, and manually seperated for storage needs:
+# following sources, and partly seperated for storage needs:
 # - https://www.bctransit.com/open-data/
 # - https://www.translink.ca/about-us/doing-business-with-translink/app-developer-resources/gtfs/gtfs-data
 
@@ -60,44 +60,38 @@ getTime = np.vectorize(getTime, otypes=[np.datetime64])
 def main():
     
     # initializing pandas dataframe
-    data = pd.DataFrame()
-    
+    stop_timing = pd.DataFrame()
+    stop_info = pd.DataFrame()
     # Iterate files
     for file in os.listdir(CWD + STOP_TIME_DIR):
         # Get city name from filename
         city = getCity(file)
         # Get data from csv and put into pandas dataframe
-        init_data = pd.read_csv(CWD+STOP_TIME_DIR+file)
+        temp_timing = pd.read_csv(CWD+STOP_TIME_DIR+file)
         # Add city name as column
-        init_data['city'] = city
-        # Make time variable usable
-        init_data['arrival_time'] = getTime(init_data['arrival_time'])
-        # sort data so stops are main priority and times are second priority
-        init_data = init_data.sort_values(by=['stop_id', 'arrival_time'], 
-                                          ignore_index=True)
-        # Move next time into workable column to avoid iteration
-        init_data['next_time'] = init_data['arrival_time'].shift(-1)
-        init_data['next_sid'] = init_data['stop_id'].shift(-1)
-        init_data['next_tid'] = init_data['trip_id'].shift(-1)
-        
-        # Remove rows where current stop id != to next stop id
-        init_data = init_data[init_data['next_sid'] != 'None']
-        init_data.dropna()
-        init_data = init_data[(init_data['stop_id'] == init_data['next_sid'])]
-        init_data = init_data.reset_index(drop=True)
-        
-        # Calculate the wait times at stops between successive busses
-        init_data['wait_time'] = calcWaitTime(init_data['next_time'],
-                                              init_data['arrival_time'])
-        init_data = init_data[init_data['wait_time'] > 0]
-        init_data = init_data[['city', 'wait_time']]
-        
-        data = pd.concat([data, init_data], ignore_index=True)
-        print(data)
-        # Check if there is an output director and save csv file to it
+        temp_timing['city'] = city
+        # Fix data in greater_vancouver files
+        if city == 'Greater_Vancouver':
+            temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'].replace(np.nan, 0)
+            temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'] * 1000
+        # Append to bigger pandas dataframe
+        stop_timing = pd.concat([stop_timing, temp_timing], ignore_index=True)
+    for file in os.listdir(CWD + STOP_INFO_DIR):
+        # Get data from csv and put into pandas dataframe
+        temp_info = pd.read_csv(CWD+STOP_INFO_DIR+file)
+        # Append to bigger pandas dataframe
+        stop_info = pd.concat([stop_info, temp_info], ignore_index=True)
+    # Join newly formed dataframes by stop_id    
+    data = stop_timing.merge(stop_info, how='inner', on='stop_id')
+    data = data.dropna(axis='columns')
+    data = data.sort_values(['city', 'trip_id', 'stop_sequence'], ignore_index=True)
+    print(data)
+            
+    # Check if there is an output director and save csv file to it
     if not os.path.exists(CWD + OUTPUT_DIR):
         os.mkdir(CWD + OUTPUT_DIR)
-    data.to_csv(CWD + OUTPUT_DIR + 'city_wait_times.csv')
+    data.to_csv(CWD + OUTPUT_DIR + 'city_wait_times.csv', index=False)
+    
       
 
 if __name__ == '__main__':
