@@ -61,9 +61,11 @@ getTime = np.vectorize(getTime, otypes=[np.datetime64])
 def main():
     
     # initializing pandas dataframe
-    stop_timing = pd.DataFrame()
-    stop_info = pd.DataFrame()
-    trip_info = pd.DataFrame()
+    stop_timing = pd.DataFrame()    # Info from stop_times.txt
+    stop_info = pd.DataFrame()      # Info from stops.txt
+    trip_info = pd.DataFrame()      # Info from trips.txt
+    # DataFrame meant to hold trip travel distances based on means of samples 
+    # from the data with cities as column names
     sampled_data = pd.DataFrame()
     # Iterate files
     for file in os.listdir(CWD + STOP_TIME_DIR):
@@ -71,6 +73,7 @@ def main():
         city = getCity(file)
         # Get data from csv and put into pandas dataframe
         temp_timing = pd.read_csv(CWD+STOP_TIME_DIR+file)
+        # A series of samples used later for ANOVA test and tukey-u (per city)
         samples = pd.Series()
         # Add city name as column
         temp_timing['city'] = city
