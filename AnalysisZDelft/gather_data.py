@@ -23,6 +23,7 @@ from datetime import datetime, timedelta
 # Directories holding raw data
 STOP_TIME_DIR = '\\city_stop_data_files\\stop_times\\'
 STOP_INFO_DIR = '\\city_stop_data_files\\stop_info\\'
+TRIP_INFO_DIR = '\\city_stop_data_files\\trip_info\\'
 OUTPUT_DIR = '\\gathered_data\\'
 CWD = os.getcwd()
 
@@ -62,18 +63,28 @@ def main():
     # initializing pandas dataframe
     stop_timing = pd.DataFrame()
     stop_info = pd.DataFrame()
+    trip_info = pd.DataFrame()
+    sampled_data = pd.DataFrame()
     # Iterate files
     for file in os.listdir(CWD + STOP_TIME_DIR):
         # Get city name from filename
         city = getCity(file)
         # Get data from csv and put into pandas dataframe
         temp_timing = pd.read_csv(CWD+STOP_TIME_DIR+file)
+        samples = pd.Series()
         # Add city name as column
         temp_timing['city'] = city
         # Fix data in greater_vancouver files
         if city == 'Greater_Vancouver':
             temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'].replace(np.nan, 0)
             temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'] * 1000
+        
+        for i in range(40):
+            sample = temp_timing.sample(n=10, replace=True)
+            mean = sample.loc[:,'shape_dist_traveled'].mean()
+            samples = pd.concat([samples, pd.Series([mean])], ignore_index=True)
+        sampled_data[city] = samples
+        
         # Append to bigger pandas dataframe
         stop_timing = pd.concat([stop_timing, temp_timing], ignore_index=True)
     for file in os.listdir(CWD + STOP_INFO_DIR):
@@ -81,17 +92,24 @@ def main():
         temp_info = pd.read_csv(CWD+STOP_INFO_DIR+file)
         # Append to bigger pandas dataframe
         stop_info = pd.concat([stop_info, temp_info], ignore_index=True)
+    """    
+    for file in os.listdir(CWD + TRIP_INFO_DIR):
+        temp_trips = pd.read_csv(CWD+TRIP_INFO_DIR+file)
+        trip_info = pd.concat([trip_info, temp_trips], ignore_index=True)
+    """
     # Join newly formed dataframes by stop_id    
     data = stop_timing.merge(stop_info, how='inner', on='stop_id')
+    #data = stop_timing.merge(trip_info, how='inner', on='trip_id')
     data = data.dropna(axis='columns')
     data = data.sort_values(['city', 'trip_id', 'stop_sequence'], ignore_index=True)
+    max_dist = data.loc[data.groupby(['city', 'trip_id'])['shape_dist_traveled'].idxmax()]
     print(data)
             
     # Check if there is an output director and save csv file to it
     if not os.path.exists(CWD + OUTPUT_DIR):
         os.mkdir(CWD + OUTPUT_DIR)
-    data.to_csv(CWD + OUTPUT_DIR + 'city_wait_times.csv', index=False)
-    
+    max_dist.to_csv(CWD + OUTPUT_DIR + 'city_wait_times.csv', index=False)
+    sampled_data.to_csv(CWD + OUTPUT_DIR + 'sampled_data.csv', index=False)
       
 
 if __name__ == '__main__':
