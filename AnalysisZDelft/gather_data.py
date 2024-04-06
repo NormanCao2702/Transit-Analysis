@@ -82,7 +82,7 @@ def main():
             temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'].replace(np.nan, 0)
             temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'] * 1000
         
-        for i in range(40):
+        for i in range(41):
             sample = temp_timing.sample(n=10, replace=True)
             mean = sample.loc[:,'shape_dist_traveled'].mean()
             samples = pd.concat([samples, pd.Series([mean])], ignore_index=True)
