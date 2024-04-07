@@ -1,0 +1,114 @@
+[
+    {
+        "VehicleNo": "19020",
+        "TripId": 13717685,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E8TL",
+        "Latitude": 49.281,
+        "Longitude": -123.006867,
+        "RecordedTime": "11:30:07 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "19021",
+        "TripId": 13717698,
+        "RouteNo": "R5",
+        "Direction": "WEST",
+        "Destination": "HASTINGS ST / TO BURRARD STN",
+        "Pattern": "W1",
+        "Latitude": 49.281117,
+        "Longitude": -123.015367,
+        "RecordedTime": "11:30:22 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "19040",
+        "TripId": 13717633,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E1",
+        "Latitude": 49.281033,
+        "Longitude": -123.0846,
+        "RecordedTime": "11:29:52 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "19041",
+        "TripId": 13717713,
+        "RouteNo": "R5",
+        "Direction": "WEST",
+        "Destination": "HASTINGS ST / TO BURRARD STN",
+        "Pattern": "W1",
+        "Latitude": 49.281183,
+        "Longitude": -123.0887,
+        "RecordedTime": "11:30:38 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "19045",
+        "TripId": 13717715,
+        "RouteNo": "R5",
+        "Direction": "WEST",
+        "Destination": "HASTINGS ST / TO BURRARD STN",
+        "Pattern": "W1",
+        "Latitude": 49.28135,
+        "Longitude": -122.92705,
+        "RecordedTime": "11:29:56 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "22006",
+        "TripId": 13717634,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E1",
+        "Latitude": 49.281083,
+        "Longitude": -123.02465,
+        "RecordedTime": "11:30:00 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "22015",
+        "TripId": 13717632,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E1",
+        "Latitude": 49.2858,
+        "Longitude": -123.118867,
+        "RecordedTime": "11:30:05 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "23006",
+        "TripId": 13717635,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E1",
+        "Latitude": 49.28005,
+        "Longitude": -122.919783,
+        "RecordedTime": "11:29:57 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    }
+]

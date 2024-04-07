@@ -1,0 +1,72 @@
+[
+    {
+        "VehicleNo": "19040",
+        "TripId": 13717720,
+        "RouteNo": "R5",
+        "Direction": "WEST",
+        "Destination": "HASTINGS ST / TO BURRARD STN",
+        "Pattern": "W1",
+        "Latitude": 49.280867,
+        "Longitude": -122.9293,
+        "RecordedTime": "07:01:04 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "19041",
+        "TripId": 13717610,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E1",
+        "Latitude": 49.2811,
+        "Longitude": -123.027317,
+        "RecordedTime": "07:01:41 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "19045",
+        "TripId": 13717768,
+        "RouteNo": "R5",
+        "Direction": "WEST",
+        "Destination": "HASTINGS ST / TO BURRARD STN",
+        "Pattern": "W8TL",
+        "Latitude": 49.282717,
+        "Longitude": -123.1098,
+        "RecordedTime": "07:01:16 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "22015",
+        "TripId": 13717614,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E1",
+        "Latitude": 49.2792,
+        "Longitude": -122.920183,
+        "RecordedTime": "07:01:47 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "23006",
+        "TripId": 13717763,
+        "RouteNo": "R5",
+        "Direction": "WEST",
+        "Destination": "HASTINGS ST / TO BURRARD STN",
+        "Pattern": "W1",
+        "Latitude": 49.28135,
+        "Longitude": -123.071533,
+        "RecordedTime": "07:01:21 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    }
+]

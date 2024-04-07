@@ -1,0 +1,30 @@
+[
+    {
+        "VehicleNo": "8104",
+        "TripId": 13678900,
+        "RouteNo": "145",
+        "Direction": "SOUTH",
+        "Destination": "PRODUCTION STN",
+        "Pattern": "S1",
+        "Latitude": 49.26145,
+        "Longitude": -122.905983,
+        "RecordedTime": "09:24:08 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/145.kmz"
+        }
+    },
+    {
+        "VehicleNo": "8114",
+        "TripId": 13678854,
+        "RouteNo": "145",
+        "Direction": "NORTH",
+        "Destination": "SFU",
+        "Pattern": "N1",
+        "Latitude": 49.274483,
+        "Longitude": -122.927167,
+        "RecordedTime": "09:24:47 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/145.kmz"
+        }
+    }
+]

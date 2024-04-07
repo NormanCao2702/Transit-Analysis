@@ -1,0 +1,44 @@
+[
+    {
+        "VehicleNo": "9496",
+        "TripId": 13678444,
+        "RouteNo": "144",
+        "Direction": "SOUTH",
+        "Destination": "METROTOWN STN",
+        "Pattern": "SB1",
+        "Latitude": 49.27955,
+        "Longitude": -122.920567,
+        "RecordedTime": "11:56:42 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/144.kmz"
+        }
+    },
+    {
+        "VehicleNo": "9525",
+        "TripId": 13678435,
+        "RouteNo": "144",
+        "Direction": "NORTH",
+        "Destination": "SFU",
+        "Pattern": "NB1",
+        "Latitude": 49.248733,
+        "Longitude": -122.974617,
+        "RecordedTime": "11:55:55 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/144.kmz"
+        }
+    },
+    {
+        "VehicleNo": "9531",
+        "TripId": 13678447,
+        "RouteNo": "144",
+        "Direction": "SOUTH",
+        "Destination": "METROTOWN STN",
+        "Pattern": "SB1",
+        "Latitude": 49.239483,
+        "Longitude": -122.9636,
+        "RecordedTime": "11:56:45 am",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/144.kmz"
+        }
+    }
+]
