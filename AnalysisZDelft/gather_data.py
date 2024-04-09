@@ -42,7 +42,7 @@ calcWaitTime = np.vectorize(calcWaitTime, otypes=[np.float64])
 regex = re.compile('(.+?)(?=_stop)')
 def getCity(filename):
     city = regex.search(filename)
-    return city.group(0)
+    return city.group(0).replace('_', ' ')
 
 # Function used to conver string to hr, min, sec datetime
 def getTime(string):
@@ -57,63 +57,89 @@ def getTime(string):
     return time
 getTime = np.vectorize(getTime, otypes=[np.datetime64])
 
+# function to get time difference in hours
+def getHrs(diff):
+    days = diff.days
+    seconds = diff.seconds
+    return (days * 24) + (seconds / 3600)
+getHrs = np.vectorize(getHrs, otypes=[np.float64])
+
 # Main function
 def main():
-    
+    print('Please wait while data is cleaned and saved to a more usable form...')
     # initializing pandas dataframe
     stop_timing = pd.DataFrame()    # Info from stop_times.txt
     stop_info = pd.DataFrame()      # Info from stops.txt
     trip_info = pd.DataFrame()      # Info from trips.txt
-    # DataFrame meant to hold trip travel distances based on means of samples 
+    # DataFrame meant to hold trip travel distances based on means of dist_samples 
     # from the data with cities as column names
-    sampled_data = pd.DataFrame()
+    sampled_dist_data = pd.DataFrame()
+    sampled_speed_data = pd.DataFrame()
     # Iterate files
     for file in os.listdir(CWD + STOP_TIME_DIR):
         # Get city name from filename
         city = getCity(file)
+        print(f' - Cleaning and Re-organizing Data for {city}')
         # Get data from csv and put into pandas dataframe
         temp_timing = pd.read_csv(CWD+STOP_TIME_DIR+file)
         # A series of samples used later for ANOVA test and tukey-u (per city)
-        samples = pd.Series()
+        dist_samples = pd.Series()
+        speed_samples = pd.Series()
         # Add city name as column
         temp_timing['city'] = city
         # Fix data in greater_vancouver files
-        if city == 'Greater_Vancouver':
+        if city != 'Greater_Vancouver':
             temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'].replace(np.nan, 0)
-            temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'] * 1000
+            temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'] / 1000 # km
+        # Turn column 'arrival_time' to datetime object
+        temp_timing['arrival_time'] = getTime(temp_timing['arrival_time'])
+        temp_timing['departure_time'] = getTime(temp_timing['departure_time'])
         
+        #print(temp_timing)
+        
+        # Get only rows with routw beginnig
+        temp_beginning = temp_timing.loc[temp_timing.groupby(['trip_id'])['shape_dist_traveled'].idxmin()]
+        # Remove unneeded column
+        temp_beginning = temp_beginning.drop(columns=['arrival_time'])
+        temp_beginning = temp_beginning.drop(columns=['shape_dist_traveled'])
+        # Get only rows with route endings
+        temp_end = temp_timing.loc[temp_timing.groupby(['trip_id'])['shape_dist_traveled'].idxmax()]
+        # Remove unneeded column
+        temp_end = temp_end.drop(columns=['departure_time'])
+        # Merge needed information into single dataFrame
+        temp_dist = temp_beginning.merge(temp_end[['arrival_time', 'trip_id', 'shape_dist_traveled']], 
+                                         how='inner', on='trip_id')
+        # Sort for visual checks - remove at later time
+        temp_dist = temp_dist.sort_values(['trip_id'], ignore_index=True)
+        
+        # Find time difference between start and end of route
+        temp_dist['time_diff'] = temp_dist['arrival_time'] - temp_dist['departure_time']
+        # Convert Difference to hours
+        temp_dist['time_diff'] = getHrs(temp_dist['time_diff'])
+        # Calculate average speed drivers need to sustain to meet deadline
+        temp_dist['avg_speed'] = temp_dist['shape_dist_traveled'] / temp_dist['time_diff']
+        
+        # Create samples
         for i in range(41):
-            sample = temp_timing.sample(n=10, replace=False)
-            mean = sample.loc[:,'shape_dist_traveled'].mean()
-            samples = pd.concat([samples, pd.Series([mean])], ignore_index=True)
-        sampled_data[city] = samples
+            sample = temp_dist.sample(n=3, replace=False)
+            # Distances (km)
+            dist_mean = sample.loc[:, 'shape_dist_traveled'].mean()
+            dist_samples = pd.concat([dist_samples, pd.Series([dist_mean])], ignore_index=True)
+            # Speeds (km/h)
+            speed_mean = sample.loc[:, 'avg_speed'].mean()
+            speed_samples = pd.concat([speed_samples, pd.Series([speed_mean])])
+        sampled_dist_data[city] = dist_samples
+        sampled_speed_data[city] = speed_samples
         
-        # Append to bigger pandas dataframe
-        stop_timing = pd.concat([stop_timing, temp_timing], ignore_index=True)
-    for file in os.listdir(CWD + STOP_INFO_DIR):
-        # Get data from csv and put into pandas dataframe
-        temp_info = pd.read_csv(CWD+STOP_INFO_DIR+file)
-        # Append to bigger pandas dataframe
-        stop_info = pd.concat([stop_info, temp_info], ignore_index=True)
-    """    
-    for file in os.listdir(CWD + TRIP_INFO_DIR):
-        temp_trips = pd.read_csv(CWD+TRIP_INFO_DIR+file)
-        trip_info = pd.concat([trip_info, temp_trips], ignore_index=True)
-    """
-    # Join newly formed dataframes by stop_id    
-    data = stop_timing.merge(stop_info, how='inner', on='stop_id')
-    #data = stop_timing.merge(trip_info, how='inner', on='trip_id')
-    data = data.dropna(axis='columns')
-    data = data.sort_values(['city', 'trip_id', 'stop_sequence'], ignore_index=True)
-    max_dist = data.loc[data.groupby(['city', 'trip_id'])['shape_dist_traveled'].idxmax()]
-    print(data)
-            
+        
     # Check if there is an output director and save csv file to it
     if not os.path.exists(CWD + OUTPUT_DIR):
         os.mkdir(CWD + OUTPUT_DIR)
-    max_dist.to_csv(CWD + OUTPUT_DIR + 'city_wait_times.csv', index=False)
-    sampled_data.to_csv(CWD + OUTPUT_DIR + 'sampled_data.csv', index=False)
-      
+    sampled_dist_data.to_csv(CWD + OUTPUT_DIR + 'sampled_dist_data.csv', index=False)
+    sampled_speed_data.to_csv(CWD + OUTPUT_DIR + 'sampled_speed_data.csv', index=False)
+    
+    print('...Finished cleaning data')
+
 
 if __name__ == '__main__':
     main()
