@@ -7,13 +7,15 @@
 # Program is meant to do the following
 # [1] open sample_data.csv into a pandas dataframe
 # [2] Create a histogram of the samples
-# [3] Perform ANOVA test on data by column = city
-# [4] Perform a one-sided t-test 
+# [3] Perform ANOVA test on data by column = city (distances and speeds)
+# [4] Perform a one-sided t-test (Tukey-U)
+# [5] Perform linear regression and find correlation between distance and speed
 
 # Made reference to:
 # https://stackoverflow.com/questions/16826711/is-it-possible-to-add-a-string-as-a-legend-item
 # https://matplotlib.org/stable/gallery/statistics/histogram_multihist.html
 # https://stackoverflow.com/questions/40516810/saving-statmodels-tukey-hsd-into-a-python-pandas-dataframe
+# https://python-graph-gallery.com/scatterplot-with-regression-fit-in-matplotlib/
 # extensive reference to various source pages
 
 import os
