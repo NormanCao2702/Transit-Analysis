@@ -10,14 +10,18 @@
 # [3] Perform ANOVA test on data by column = city
 # [4] Perform a one-sided t-test 
 
+# Made reference to:
+# https://stackoverflow.com/questions/16826711/is-it-possible-to-add-a-string-as-a-legend-item
+# https://matplotlib.org/stable/gallery/statistics/histogram_multihist.html
+# https://stackoverflow.com/questions/40516810/saving-statmodels-tukey-hsd-into-a-python-pandas-dataframe
+# extensive reference to various source pages
+
 import os
 import pandas as pd
+import numpy as np
 from matplotlib import pyplot as plt
 from scipy import stats
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
-import statsmodels.api as sm
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 # Needed Directories
 SAMPLES_DIR = '\\gathered_data\\'
@@ -31,8 +35,6 @@ SPEED_STRING = 'Sampled_Avg_Speed'
 def createHistograms(data, string):
     print(f' - Visualizing Data for {string.replace("_", " ")}')
     # Create and save histogram of the samples
-    # Made reference to:
-    # https://matplotlib.org/stable/gallery/statistics/histogram_multihist.html
     figure, axis = plt.subplots(nrows=2, ncols=4)
     figure.suptitle(f'Histogram of Mean {string.replace("_", " ")}')
     figure.set_figheight(15)
@@ -95,8 +97,6 @@ def performPostHocAnalysis(m_data, string):
      if not os.path.exists(CWD + OUTPUT_DIR):
          os.mkdir(CWD + OUTPUT_DIR)
      plt.savefig(CWD+OUTPUT_DIR+f'{string.lower()}_tukey_u_simultaneous_plot.png')
-     # Made reference to:
-     # https://stackoverflow.com/questions/40516810/saving-statmodels-tukey-hsd-into-a-python-pandas-dataframe
      temp = pd.DataFrame(data=posthoc._results_table.data[1:], 
                        columns=posthoc._results_table.data[0])
      temp.to_csv(CWD+OUTPUT_DIR+f'{string.lower()}_pairwise_tukeyhsd_result.txt')
@@ -104,13 +104,21 @@ def performPostHocAnalysis(m_data, string):
 # Function to perform a linear regression between to presumed non-independent sets of data
 def performLinearRegression(data1, data2, string):
     print(f' - Performing linear regression on {string.replace("_", " ")}')
-    
-    results = sm.OLS(data1['value'], data2['value']).fit()
+    regression = stats.linregress(data1['value'], data2['value'])
+    x_range = np.linspace(0, 100, 50)
+    prediction = x_range * regression.slope + regression.intercept
+    plot = plt.figure(figsize=(15, 12))
+    plt.scatter(data1['value'], data2['value'], alpha=0.5, label='Distances vs Avg Speeds')
+    plt.plot(x_range, prediction, 'r-', alpha=0.5, label='Linear Regression')
+    plt.plot([], [], ' ', label=f'Correlation Coefficient r = {regression.rvalue}, r^2 = {regression.rvalue**2}')
+    plt.title('Linear Reagression of Distance Traveled and Avg Speed ')
+    plt.xlabel('Sampled Mean Distances (km)')
+    plt.ylabel('Sampled Avg Speeds (km/hr)')
+    plt.legend()
+
     if not os.path.exists(CWD + OUTPUT_DIR):
         os.mkdir(CWD + OUTPUT_DIR)
-    file = open(CWD+OUTPUT_DIR+f'{string.lower()}_OLS_result.txt', 'w')
-    file.write(results.summary().as_text())
-    file.close()
+    plt.savefig(CWD + OUTPUT_DIR + f'{string.lower()}_linear_regression.png')
 
 # Main function 
 def main():

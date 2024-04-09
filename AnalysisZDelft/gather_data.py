@@ -67,11 +67,6 @@ getHrs = np.vectorize(getHrs, otypes=[np.float64])
 # Main function
 def main():
     print('Please wait while data is cleaned and saved to a more usable form...')
-    # initializing pandas dataframe
-    stop_timing = pd.DataFrame()    # Info from stop_times.txt
-    stop_info = pd.DataFrame()      # Info from stops.txt
-    trip_info = pd.DataFrame()      # Info from trips.txt
-    # DataFrame meant to hold trip travel distances based on means of dist_samples 
     # from the data with cities as column names
     sampled_dist_data = pd.DataFrame()
     sampled_speed_data = pd.DataFrame()
@@ -88,14 +83,12 @@ def main():
         # Add city name as column
         temp_timing['city'] = city
         # Fix data in greater_vancouver files
-        if city != 'Greater_Vancouver':
-            temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'].replace(np.nan, 0)
+        temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'].replace(np.nan, 0)
+        if city != 'Greater Vancouver':
             temp_timing['shape_dist_traveled'] = temp_timing['shape_dist_traveled'] / 1000 # km
         # Turn column 'arrival_time' to datetime object
         temp_timing['arrival_time'] = getTime(temp_timing['arrival_time'])
         temp_timing['departure_time'] = getTime(temp_timing['departure_time'])
-        
-        #print(temp_timing)
         
         # Get only rows with routw beginnig
         temp_beginning = temp_timing.loc[temp_timing.groupby(['trip_id'])['shape_dist_traveled'].idxmin()]
