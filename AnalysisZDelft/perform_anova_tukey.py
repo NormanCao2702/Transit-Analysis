@@ -15,6 +15,9 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from scipy import stats
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
+import statsmodels.api as sm
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 # Needed Directories
 SAMPLES_DIR = '\\gathered_data\\'
@@ -98,6 +101,17 @@ def performPostHocAnalysis(m_data, string):
                        columns=posthoc._results_table.data[0])
      temp.to_csv(CWD+OUTPUT_DIR+f'{string.lower()}_pairwise_tukeyhsd_result.txt')
 
+# Function to perform a linear regression between to presumed non-independent sets of data
+def performLinearRegression(data1, data2, string):
+    print(f' - Performing linear regression on {string.replace("_", " ")}')
+    
+    results = sm.OLS(data1['value'], data2['value']).fit()
+    if not os.path.exists(CWD + OUTPUT_DIR):
+        os.mkdir(CWD + OUTPUT_DIR)
+    file = open(CWD+OUTPUT_DIR+f'{string.lower()}_OLS_result.txt', 'w')
+    file.write(results.summary().as_text())
+    file.close()
+
 # Main function 
 def main():
     print('Please wait while the analysis is performed...')
@@ -106,6 +120,8 @@ def main():
     speed_data = pd.read_csv(CWD + SAMPLES_DIR + 'sampled_speed_data.csv')
     createHistograms(dist_data, DIST_STRING)
     createHistograms(speed_data, SPEED_STRING)
+    melted_dist_data = pd.DataFrame()
+    melted_speed_data = pd.DataFrame()
 
     # If ANOVA test passes move on to Tukey-U test
     if performAnova(dist_data, DIST_STRING) < 0.05:
@@ -124,6 +140,8 @@ def main():
     else:
         print(f'Because ANOVA p-value > 0.05 for {SPEED_STRING.replace("_", " ")}, '
               + 'we cannot conclude there is a difference between means of the city distances')
+        
+    performLinearRegression(melted_dist_data, melted_speed_data, 'Distance_and_Speed')
     
     print(f'Finished, output filed saved to {OUTPUT_DIR}')
     
