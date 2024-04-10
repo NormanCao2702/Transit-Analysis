@@ -37,7 +37,14 @@ Remarks:
 <br>
 
 ## Step 3: Clean the data and extract the features
-- On process
+**Program: clean_real_time_data.ipynb**
+- This progam cleans the real time data with the following steps.
+1. Convert the date and time strings to datetime
+2. Drop the unused columns
+3. Drop all null values
+4. Drop all duplicates
+5. Filter the recorded hour bewteen 7:00 to 23:00
+6. Remove all outliers
 
 <br>
 
