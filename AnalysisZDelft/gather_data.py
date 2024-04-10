@@ -22,8 +22,6 @@ from datetime import datetime, timedelta
 
 # Directories holding raw data
 STOP_TIME_DIR = '\\city_stop_data_files\\stop_times\\'
-STOP_INFO_DIR = '\\city_stop_data_files\\stop_info\\'
-TRIP_INFO_DIR = '\\city_stop_data_files\\trip_info\\'
 OUTPUT_DIR = '\\gathered_data\\'
 CWD = os.getcwd()
 
@@ -113,8 +111,8 @@ def main():
         temp_dist['avg_speed'] = temp_dist['shape_dist_traveled'] / temp_dist['time_diff']
         
         # Create samples
-        for i in range(41):
-            sample = temp_dist.sample(n=3, replace=False)
+        for i in range(61):
+            sample = temp_dist.sample(n=2, replace=False)
             # Distances (km)
             dist_mean = sample.loc[:, 'shape_dist_traveled'].mean()
             dist_samples = pd.concat([dist_samples, pd.Series([dist_mean])], ignore_index=True)
