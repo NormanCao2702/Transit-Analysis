@@ -33,6 +33,7 @@ def extractRealTimeDataAndWrite():
         print('Reading the file: ' + filename)
         try:
             df = pd.read_json(REAL_TIME_DATA_DIRECTORY + filename)
+            df['RecordedDate'] = filename.split('_')[1]
             df_list.append(df)
             extraction_report['valid_file_count'] += 1
         except:
