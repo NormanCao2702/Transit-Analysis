@@ -71,6 +71,13 @@ Remarks:
 
 <br>
 
+**Program: train_models.ipynb**
+- This program trains machine learning models.
+- Option A: Arrival Time Prediction (Regression)
+- Option B: On-Time Arrival Prediction (Classification)
+
+<br>
+
 ## Step 5: Evaluate the machine learning models
 - On scheduled
 
