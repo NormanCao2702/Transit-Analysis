@@ -1,0 +1,72 @@
+[
+    {
+        "VehicleNo": "8102",
+        "TripId": 13678603,
+        "RouteNo": "145",
+        "Direction": "SOUTH",
+        "Destination": "PRODUCTION STN",
+        "Pattern": "S1",
+        "Latitude": 49.265817,
+        "Longitude": -122.907683,
+        "RecordedTime": "02:05:35 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/145.kmz"
+        }
+    },
+    {
+        "VehicleNo": "8104",
+        "TripId": 13678635,
+        "RouteNo": "145",
+        "Direction": "SOUTH",
+        "Destination": "PRODUCTION STN",
+        "Pattern": "S1",
+        "Latitude": 49.278533,
+        "Longitude": -122.9129,
+        "RecordedTime": "02:05:19 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/145.kmz"
+        }
+    },
+    {
+        "VehicleNo": "8107",
+        "TripId": 13678634,
+        "RouteNo": "145",
+        "Direction": "SOUTH",
+        "Destination": "PRODUCTION STN",
+        "Pattern": "S1",
+        "Latitude": 49.276833,
+        "Longitude": -122.909433,
+        "RecordedTime": "02:05:11 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/145.kmz"
+        }
+    },
+    {
+        "VehicleNo": "8108",
+        "TripId": 13678546,
+        "RouteNo": "145",
+        "Direction": "NORTH",
+        "Destination": "SFU",
+        "Pattern": "N1",
+        "Latitude": 49.253733,
+        "Longitude": -122.917867,
+        "RecordedTime": "02:04:48 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/145.kmz"
+        }
+    },
+    {
+        "VehicleNo": "8115",
+        "TripId": 13678492,
+        "RouteNo": "145",
+        "Direction": "NORTH",
+        "Destination": "SFU",
+        "Pattern": "N1",
+        "Latitude": 49.274117,
+        "Longitude": -122.9264,
+        "RecordedTime": "02:05:34 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/145.kmz"
+        }
+    }
+]

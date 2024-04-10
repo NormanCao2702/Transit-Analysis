@@ -1,0 +1,142 @@
+[
+    {
+        "VehicleNo": "19013",
+        "TripId": 13717279,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO KOOTENAY LOOP",
+        "Pattern": "E8FL",
+        "Latitude": 49.28115,
+        "Longitude": -123.070883,
+        "RecordedTime": "07:43:45 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "19021",
+        "TripId": 13717344,
+        "RouteNo": "R5",
+        "Direction": "WEST",
+        "Destination": "HASTINGS ST / TO BURRARD STN",
+        "Pattern": "W1",
+        "Latitude": 49.281117,
+        "Longitude": -123.00415,
+        "RecordedTime": "07:42:49 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "19034",
+        "TripId": 13717307,
+        "RouteNo": "R5",
+        "Direction": "WEST",
+        "Destination": "HASTINGS ST / TO BURRARD STN",
+        "Pattern": "W1",
+        "Latitude": 49.274133,
+        "Longitude": -122.93565,
+        "RecordedTime": "07:43:12 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "19045",
+        "TripId": 13717185,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E1",
+        "Latitude": 49.281183,
+        "Longitude": -123.070533,
+        "RecordedTime": "07:43:11 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "22012",
+        "TripId": 13717189,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E1",
+        "Latitude": 49.280333,
+        "Longitude": -122.910733,
+        "RecordedTime": "07:43:17 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "8126",
+        "TripId": 13717328,
+        "RouteNo": "R5",
+        "Direction": "WEST",
+        "Destination": "HASTINGS ST / TO BURRARD STN",
+        "Pattern": "W1",
+        "Latitude": 49.2813,
+        "Longitude": -123.094317,
+        "RecordedTime": "07:43:12 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "8128",
+        "TripId": 13717266,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO KOOTENAY LOOP",
+        "Pattern": "E8FL2",
+        "Latitude": 49.281017,
+        "Longitude": -123.043033,
+        "RecordedTime": "07:30:16 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "8134",
+        "TripId": 13717147,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E1",
+        "Latitude": 49.286,
+        "Longitude": -123.11865,
+        "RecordedTime": "07:42:56 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "8141",
+        "TripId": 13717177,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO SFU EXCHANGE",
+        "Pattern": "E1",
+        "Latitude": 49.280967,
+        "Longitude": -123.000483,
+        "RecordedTime": "07:43:03 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    },
+    {
+        "VehicleNo": "8154",
+        "TripId": 13717264,
+        "RouteNo": "R5",
+        "Direction": "EAST",
+        "Destination": "HASTINGS ST / TO KOOTENAY LOOP",
+        "Pattern": "E8FL2",
+        "Latitude": 49.281117,
+        "Longitude": -123.057967,
+        "RecordedTime": "07:42:51 pm",
+        "RouteMap": {
+            "Href": "https://nb.translink.ca/geodata/R5.kmz"
+        }
+    }
+]
