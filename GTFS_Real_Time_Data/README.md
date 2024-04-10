@@ -17,6 +17,8 @@
 Remarks:
 - The testing API key is only for testing. Please use your API key for long testing.
 
+<br>
+
 **File: real_time_data/*.json**
 - The filename format is RouteNumber_YearMonthDay_HourMinuteSecond.
 
@@ -28,8 +30,12 @@ Remarks:
 - This extracted data will exclude invalid data, for example, server error messages and no buses in this route message.
 - This program will also generate an extraction report named **extraction_report.json**.
 
+<br>
+
 **File: extracted_real_time_data.json**
 - A JSON file that combines all the real-time data.
+
+<br>
 
 **File: extraction_report.json**
 - A JSON file that records the data count, file count, valid file count, invalid file count, names of invalid files..
@@ -39,17 +45,29 @@ Remarks:
 ## Step 3: Clean the data and extract the features
 **Program: clean_real_time_data.ipynb**
 - This progam cleans the real time data with the following steps.
-1. Convert the date and time strings to datetime
-2. Drop the unused columns
-3. Drop all null values
-4. Drop all duplicates
-5. Filter the recorded hour bewteen 7:00 to 23:00
-6. Remove all outliers
+- The output is a JSON file named **cleaned_real_time_data.json**.
+
+| Step | Description | Data Frame Size |
+| :- | :- | :- |
+| 0 | Extracted data | 62772 rows × 11 columns |
+| 1 | Convert the date and time strings to datetime | 62772 rows × 12 columns |
+| 2 | Drop the unused columns | 62772 rows × 5 columns |
+| 3 | Drop all null values | 62772 rows × 5 columns |
+| 4 | Drop all duplicates | 52571 rows × 5 columns |
+| 5 | Filter the recorded hour bewteen 7:00 to 23:00 | 51308 rows × 5 columns |
+| 6 | Filter the recorded date bewteen April 7 to April 9 | 51308 rows × 5 columns |
+| 7 | Remove all outliers of Latitude | 50297 rows × 5 columns |
+| 8 | Remove all outliers of Longitude | 49308 rows × 5 columns |
+
+<br>
+
+**File: cleaned_real_time_data.json**
+- A JSON file that contains the cleaned real time data
 
 <br>
 
 ## Step 4: Apply the data to machine learning models
-- On scheduled
+- On process
 
 <br>
 
