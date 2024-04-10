@@ -24,6 +24,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy import stats
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
+import seaborn
 
 # Needed Directories
 SAMPLES_DIR = '\\gathered_data\\'
@@ -48,7 +49,7 @@ def createHistograms(data, string):
     while j <= 48:
         if j > 46:
             j = 45
-        axis[y, x].hist(data.iloc[:,i:j], bins=25, alpha=0.5)
+        axis[y, x].hist(data.iloc[:,i:j], bins=25, alpha=0.75)
         axis[y, x].legend(data.iloc[:,i:j].columns, prop={'size':10})
         y = (y+1)
         if y == 2:
@@ -102,8 +103,21 @@ def performPostHocAnalysis(m_data, string):
      temp = pd.DataFrame(data=posthoc._results_table.data[1:], 
                        columns=posthoc._results_table.data[0])
      temp.to_csv(CWD+OUTPUT_DIR+f'{string.lower()}_pairwise_tukeyhsd_result.txt')
+     
 
-# Function to perform a linear regression between to presumed non-independent sets of data
+# Function to find and plot residuals from linear regression
+def plotResiduals(data1, data2, regression, string):
+    data1['residuals'] = data2['value'] - (data1['value'] * regression.slope + regression.intercept)
+    plot = plt.figure(figsize=(15, 12))
+    plt.hist(data1['residuals'], bins=25)
+    plt.title('Histogram of Residuals For Linear Regression Model')
+    plt.xlabel('Difference between predicted and observed values')
+    plt.ylabel('Count')
+    if not os.path.exists(CWD + OUTPUT_DIR):
+        os.mkdir(CWD + OUTPUT_DIR)
+    plt.savefig(CWD + OUTPUT_DIR + f'{string.lower()}_residual_hist.png')
+
+# Function to perform a linear regression between two presumed non-independent sets of data
 def performLinearRegression(data1, data2, string):
     print(f' - Performing linear regression on {string.replace("_", " ")}')
     regression = stats.linregress(data1['value'], data2['value'])
@@ -121,9 +135,14 @@ def performLinearRegression(data1, data2, string):
     if not os.path.exists(CWD + OUTPUT_DIR):
         os.mkdir(CWD + OUTPUT_DIR)
     plt.savefig(CWD + OUTPUT_DIR + f'{string.lower()}_linear_regression.png')
+    
+    plotResiduals(data1, data2, regression, string)
 
 # Main function 
 def main():
+    # Set Seaborn for future outputs
+    seaborn.set_theme()
+    
     print('Please wait while the analysis is performed...')
     # Read in files
     dist_data = pd.read_csv(CWD + SAMPLES_DIR + 'sampled_dist_data.csv')
