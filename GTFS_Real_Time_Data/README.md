@@ -9,24 +9,30 @@
 <br>
 
 ## Step 1: Get the real-time data from Translink
-**File: record_real_time_data.py**
+**Program: record_real_time_data.py**
 - This program gets the real-time data from Translink every minute.
 - The real-time data is stored in the **real_time_data** directory as JSON format.
-- The filename format is RouteNumber_YearMonthDay_HourMinuteSecond.
 - Since the maximum number of API requests per day is 1000, I only recorded the data from 7 am to 23 pm with the bus routes 144, 145, and R5.
 
 Remarks:
 - The testing API key is only for testing. Please use your API key for long testing.
 
-**File: record_real_time_data.ipynb**
-- This program is the Jupyter version of record_real_time_data.py
+**File: real_time_data/*.json**
+- The filename format is RouteNumber_YearMonthDay_HourMinuteSecond.
 
 <br>
 
 ## Step 2: Extract the real-time data
-**File: extract_real_time_data.ipynb**
+**Program: extract_real_time_data.py**
 - This program generates a JSON file from all the real-time data named **extracted_real_time_data.json**.
 - This extracted data will exclude invalid data, for example, server error messages and no buses in this route message.
+- This program will also generate an extraction report named **extraction_report.json**.
+
+**File: extracted_real_time_data.json**
+- A JSON file that combines all the real-time data.
+
+**File: extraction_report.json**
+- A JSON file that records the data count, file count, valid file count, invalid file count, names of invalid files..
 
 <br>
 
