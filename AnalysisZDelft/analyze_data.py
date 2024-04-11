@@ -108,29 +108,47 @@ def performPostHocAnalysis(m_data, string):
      temp.to_csv(CWD+OUTPUT_DIR+f'{string.lower()}_pairwise_tukeyhsd_result.txt')
      
 
-# Function to find and plot residuals from linear regression
+# Function to find and plot residuals from linear regression and show normality
+# and find both mean and standard deviation of the produced residuals, outputing
+# information to appropriate files
 def plotResiduals(data1, data2, regression, string):
     data1['residuals'] = data2['value'] - (data1['value'] * regression.slope + regression.intercept)
+    
+    norm_test_pval = stats.normaltest(data1['residuals']).pvalue
+    resid_mean = np.mean(data1['residuals'])
+    resid_std = np.std(data1['residuals'])
+    
+    output_string = (f'Residual info:\n'
+                     + f' - Normal test p-value = {norm_test_pval}\n'
+                     + f' - Residuals mean = {resid_mean}\n'
+                     + f' - Residual standard deviation = {resid_std}')
+    
     plot = plt.figure(figsize=(15, 12))
     plt.hist(data1['residuals'], bins=25)
     plt.title('Histogram of Residuals For Linear Regression Model')
     plt.xlabel('Difference between predicted and observed values')
     plt.ylabel('Count')
+    
     if not os.path.exists(CWD + OUTPUT_DIR):
         os.mkdir(CWD + OUTPUT_DIR)
     plt.savefig(CWD + OUTPUT_DIR + f'{string.lower()}_residual_hist.png')
+    file = open(CWD + OUTPUT_DIR + f'{string.lower()}_residual_info.txt', 'w')
+    file.write(output_string)
+    file.close()
 
 # Function to perform a linear regression between two presumed non-independent sets of data
 def performLinearRegression(data1, data2, string):
     print(f' - Performing linear regression on {string.replace("_", " ")}')
     regression = stats.linregress(data1['value'], data2['value'])
-    extra_label = f'Correlation Coefficient r = {regression.rvalue:.3f}, r^2 = {regression.rvalue**2:.3f}'
+    corr_label = f'Correlation Coefficient r = {regression.rvalue:.3f}, r^2 = {regression.rvalue**2:.3f}'
+    pval_label = f'P-Value of regression = {regression.pvalue}'
     x_range = np.linspace(0, 100, 50)
     prediction = x_range * regression.slope + regression.intercept
     plot = plt.figure(figsize=(15, 12))
     plt.scatter(data1['value'], data2['value'], alpha=0.50, label='Distances vs Avg Speeds')
     plt.plot(x_range, prediction, 'r-', alpha=0.75, label='Linear Regression')
-    plt.plot([], [], ' ', label=extra_label)
+    plt.plot([], [], ' ', label=pval_label)
+    plt.plot([], [], ' ', label=corr_label)
     plt.title('Linear Reagression of Distance Traveled and Avg Speed ')
     plt.xlabel('Sampled Mean Distances (km)')
     plt.ylabel('Sampled Avg Speeds (km/hr)')
