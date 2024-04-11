@@ -24,6 +24,8 @@ Note:
 - All of heatmap plot will be stored in heatmap-pic.
 - All of bus histogram will be stored in bus-histogram.
 
+Those folder should need to pre-exist in the branch in order to save in that folder
+
 ## Aspect 2: Comparing Sampled Trip Distances and Average Speeds
 
 Order of executing the files:
