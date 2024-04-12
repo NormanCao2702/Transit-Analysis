@@ -47,19 +47,22 @@ Remarks:
 - This progam cleans the real time data with the following steps.
 - The output is a JSON file named **cleaned_data.json**.
 
-| Step | Description | Data Frame Size |
-| :- | :- | :- |
-| 0 | Extracted data | 87922 rows × 11 columns |
-| 1 | Convert the time strings to datetime.time objects | 87922 rows × 11 columns |
-| 2 | Convert the time strings to datetime.date objects | 87922 rows × 11 columns |
-| 3 | Drop the unrelated columns | 87922 rows × 7 columns |
-| 4 | Drop all null values | 87922 rows × 7 columns |
-| 5 | Drop all duplicates | 72695 rows × 7 columns |
-| 6 | Filter the recorded hour bewteen 7:00 to 23:00 | 70957 rows × 7 columns |
-| 7 | Filter the recorded date bewteen April 7 to April 9 | 70957 rows × 7 columns |
-| 8 | Remove all outliers of Latitude and Longitude | 68457 rows × 7 columns |
+| Step | Description |
+| :- | :- |
+| 0 | Extracted data |
+| 1 | Convert the time strings to datetime.time objects |
+| 2 | Convert the time strings to datetime.date objects |
+| 3 | Drop the unrelated columns |
+| 4 | Drop all null values |
+| 5 | Drop all duplicates |
+| 6 | Filter the recorded hour bewteen 7:00 to 23:00 |
+| 7 | Filter the recorded date bewteen April 7 to April 10 |
+| 8 | Remove all outliers of Latitude and Longitude |
 
-- Generate the output
+Remarks:
+- static_data/stop_times.txt is removed due to the size limit. Please download the file from the link https://gtfs-static.translink.ca/gtfs/History/2024-04-05/google_transit.zip.
+
+- Generate the output column.
 
 <br>
 
@@ -68,9 +71,9 @@ Remarks:
 
 <br>
 
-## Step 4: Analyze the outputs
+## Step 4: Analyze the output column.
 **Program: analyze_data.ipynb**
-- Analyze the output.
+- Analyze the output column.
 
 <br>
 
