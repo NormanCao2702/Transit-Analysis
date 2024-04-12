@@ -7,6 +7,7 @@ import json
 # Constant Variables
 # Directories
 REAL_TIME_DATA_DIRECTORY = 'real_time_data/'
+DATA_DIRECTORY = 'data/'
 
 # Filenames
 EXTRACTED_REAL_TIME_DATA_FILENAME = 'extracted_real_time_data.json'
@@ -45,11 +46,12 @@ def extractRealTimeDataAndWrite():
     extraction_report['data_count'] = df.shape[0]
     
     # Save the data frame into a json file
-    df.to_json(EXTRACTED_REAL_TIME_DATA_FILENAME, orient='records')
+    print('Saving the extracted real time data: ' + EXTRACTED_REAL_TIME_DATA_FILENAME)
+    df.to_json(DATA_DIRECTORY + EXTRACTED_REAL_TIME_DATA_FILENAME, orient='records')
     
     # Save the extraction report
-    print('Writing the extraction report: ' + EXTRACTION_REPORT)
-    with open(EXTRACTION_REPORT, 'w') as f:
+    print('Saving the extraction report: ' + EXTRACTION_REPORT)
+    with open(DATA_DIRECTORY + EXTRACTION_REPORT, 'w') as f:
         json.dump(extraction_report, f, indent=4)
 
 

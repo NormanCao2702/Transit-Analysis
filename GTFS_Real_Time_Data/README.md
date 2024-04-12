@@ -2,9 +2,9 @@
 ## Steps
 1. Get the real-time data from Translink
 2. Extract the real-time data
-3. Clean the data and extract the features
-4. Apply the data to machine learning models
-5. Evaluate the machine learning models
+3. Clean the data and generate the output column
+4. Analyze the outputs
+5. Train and evaluate the model
 
 <br>
 
@@ -32,53 +32,50 @@ Remarks:
 
 <br>
 
-**File: extracted_real_time_data.json**
+**File: data/extracted_real_time_data.json**
 - A JSON file that combines all the real-time data.
 
 <br>
 
-**File: extraction_report.json**
+**File: data/extraction_report.json**
 - A JSON file that records the data count, file count, valid file count, invalid file count, names of invalid files..
 
 <br>
 
-## Step 3: Clean the data and extract the features
-**Program: clean_real_time_data.ipynb**
+## Step 3: Clean the data and generate the output column
+**Program: clean_data.ipynb**
 - This progam cleans the real time data with the following steps.
-- The output is a JSON file named **cleaned_real_time_data.json**.
+- The output is a JSON file named **cleaned_data.json**.
 
 | Step | Description | Data Frame Size |
 | :- | :- | :- |
-| 0 | Extracted data | 62772 rows × 11 columns |
-| 1 | Convert the date and time strings to datetime | 62772 rows × 12 columns |
-| 2 | Drop the unused columns | 62772 rows × 5 columns |
-| 3 | Drop all null values | 62772 rows × 5 columns |
-| 4 | Drop all duplicates | 52571 rows × 5 columns |
-| 5 | Filter the recorded hour bewteen 7:00 to 23:00 | 51308 rows × 5 columns |
-| 6 | Filter the recorded date bewteen April 7 to April 9 | 51308 rows × 5 columns |
-| 7 | Remove all outliers of Latitude | 50297 rows × 5 columns |
-| 8 | Remove all outliers of Longitude | 49308 rows × 5 columns |
+| 0 | Extracted data | 87922 rows × 11 columns |
+| 1 | Convert the time strings to datetime.time objects | 87922 rows × 11 columns |
+| 2 | Convert the time strings to datetime.date objects | 87922 rows × 11 columns |
+| 3 | Drop the unrelated columns | 87922 rows × 7 columns |
+| 4 | Drop all null values | 87922 rows × 7 columns |
+| 5 | Drop all duplicates | 72695 rows × 7 columns |
+| 6 | Filter the recorded hour bewteen 7:00 to 23:00 | 70957 rows × 7 columns |
+| 7 | Filter the recorded date bewteen April 7 to April 9 | 70957 rows × 7 columns |
+| 8 | Remove all outliers of Latitude and Longitude | 68457 rows × 7 columns |
+
+- Generate the output
 
 <br>
 
-**File: cleaned_real_time_data.json**
-- A JSON file that contains the cleaned real time data
+**File: cleaned_data.json**
+- A JSON file that contains the cleaned data.
 
 <br>
 
-## Step 4: Apply the data to machine learning models
-- On process
+## Step 4: Analyze the outputs
+**Program: analyze_data.ipynb**
+- Analyze the output.
 
 <br>
 
-**Program: train_models.ipynb**
-- This program trains machine learning models.
-- Option A: Arrival Time Prediction (Regression)
-- Option B: On-Time Arrival Prediction (Classification)
-
-<br>
-
-## Step 5: Evaluate the machine learning models
-- On scheduled
+## Step 5: Train and evaluate the model
+**Program: train_model.ipynb**
+- Train the RandomForestClassifier to predict the outputs.
 
 <br>
