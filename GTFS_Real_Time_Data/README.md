@@ -42,14 +42,16 @@ Remarks:
 
 <br>
 
-## Step 3: Clean the data and generate the output column
+## Step 3: Clean the data and generate the OnTime column
 **Program: clean_data.ipynb**
-- This progam cleans the real time data with the following steps.
+- This progam cleans the real time data and the static data and generates the OnTime column with the following steps.
 - The output is a JSON file named **cleaned_data.json**.
 
+<br>
+
+Real Time Data (Cleaning)
 | Step | Description |
 | :- | :- |
-| 0 | Extracted data |
 | 1 | Convert the time strings to datetime.time objects |
 | 2 | Convert the time strings to datetime.date objects |
 | 3 | Drop the unrelated columns |
@@ -59,10 +61,26 @@ Remarks:
 | 7 | Filter the recorded date bewteen April 7 to April 10 |
 | 8 | Remove all outliers of Latitude and Longitude |
 
+<br>
+
+Static Data (Cleaning)
+| Step | Description |
+| :- | :- |
+| 1 | Drop the unrelated columns (stop_times.txt) |
+| 2 | Filter the trip_id which is in the real time data |
+| 3 | Convert the time strings to the datatime.time objects |
+| 4 | Drop the unrelated columns (stops.txt) |
+| 5 | Merge the stop times data and the stops data |
+| 6 | Drop the unrelated columns (merged data frame) |
+
 Remarks:
 - static_data/stop_times.txt is removed due to the size limit. Please download the file from the link https://gtfs-static.translink.ca/gtfs/History/2024-04-05/google_transit.zip.
 
-- Generate the output column.
+<br>
+
+OnTime Column (Generating)
+- Calculate the distance between the closest bus stop and the bus. If the distance is larger than 10m, then this real time data is deleted.
+- Calculate the time difference between the arrival time of the closest bus stop and the GPS recorded time. If the time difference smaller than the threshold, then the bus is labeled as OnTime.
 
 <br>
 
@@ -71,7 +89,7 @@ Remarks:
 
 <br>
 
-## Step 4: Analyze the output column.
+## Step 4: Analyze the OnTime column.
 **Program: analyze_data.ipynb**
 - Analyze the output column.
 
