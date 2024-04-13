@@ -1,2 +1,11 @@
+# macOS system files
 .DS_Store
+
+# Files and directories related to transit analysis
+transit_api_key.txt
+backup/
+references/
+gathered_region_data/
+gather_data2.py
+analysis_region_results/
 GTFS_Real_Time_Data/static_data/stop_times.txt
