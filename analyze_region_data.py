@@ -30,8 +30,8 @@ import seaborn
 # Needed Directories
 # SAMPLES_DIR = '\\gathered_region_data\\'
 # OUTPUT_DIR = '\\analysis_region_results\\'
-SAMPLES_DIR = 'gathered_region_data'  # Removed the leading backslash
-OUTPUT_DIR = 'analysis_region_results'  # Removed the leading backslash
+SAMPLES_DIR = '/gathered_region_data/'  # Removed the leading backslash
+OUTPUT_DIR = '/analysis_region_results/'  # Removed the leading backslash
 CWD = os.getcwd()
 # Strings used for labels and output names
 DIST_STRING = 'Sampled_Max_Distances'
@@ -170,9 +170,9 @@ def main():
     print('Please wait while the analysis is performed...')
     # Read in files
     # dist_data = pd.read_csv(CWD + SAMPLES_DIR + 'sampled_dist_data.csv')
-    dist_data = pd.read_csv(os.path.join(CWD, SAMPLES_DIR, 'sampled_dist_data.csv'))
+    dist_data = pd.read_csv(CWD + SAMPLES_DIR + 'sampled_dist_data.csv')
     # speed_data = pd.read_csv(CWD + SAMPLES_DIR + 'sampled_speed_data.csv')
-    speed_data = pd.read_csv(os.path.join(CWD, SAMPLES_DIR, 'sampled_speed_data.csv'))
+    speed_data = pd.read_csv(CWD + SAMPLES_DIR + 'sampled_speed_data.csv')
     createHistograms(dist_data, DIST_STRING)
     createHistograms(speed_data, SPEED_STRING)
     melted_dist_data = pd.DataFrame()
