@@ -28,8 +28,10 @@ from statsmodels.stats.multicomp import pairwise_tukeyhsd
 import seaborn
 
 # Needed Directories
-SAMPLES_DIR = '\\gathered_region_data\\'
-OUTPUT_DIR = '\\analysis_region_results\\'
+# SAMPLES_DIR = '\\gathered_region_data\\'
+# OUTPUT_DIR = '\\analysis_region_results\\'
+SAMPLES_DIR = 'gathered_region_data'  # Removed the leading backslash
+OUTPUT_DIR = 'analysis_region_results'  # Removed the leading backslash
 CWD = os.getcwd()
 # Strings used for labels and output names
 DIST_STRING = 'Sampled_Max_Distances'
@@ -67,22 +69,22 @@ def createHistograms(data, string):
 # Given distance or speed data, performs outputs and returns ANOVA statistic and p-value
 def performAnova(data, string):
     print(f' - Preforming ANOVA on {string.replace("_", " ")}...')
-    anova = stats.f_oneway(data['100 mile house'], data['Agassiz-Harrison'], 
-                           data['Ashcroft-Cache-Creek-Clinton'], data['Bulkley Nechako'], 
-                           data['Campbell River'], data['Central Fraser Valley'], 
-                           data['Chilliwack'], data['Clearwater'], data['Columbia Valley'], 
-                           data['Comox Valley'], data['Cowichan Valley'], data['Cranbrook'], 
-                           data['Creston Valley'], data['Dawson Creek'], data['Elk Valley'], 
-                           data['Fort St John'], data['Greater Vancouver'], data['Hazeltons'], 
-                           data['Hope'], data['Kamloops'], data['Kelowna'], data['Kimberley'], 
-                           data['Kitimat'], data['Merritt'], data['Mount Waddington'], 
+    anova = stats.f_oneway(data['100 mile house'], data['Agassiz-Harrison'],
+                           data['Ashcroft-Cache-Creek-Clinton'], data['Bulkley Nechako'],
+                           data['Campbell River'], data['Central Fraser Valley'],
+                           data['Chilliwack'], data['Clearwater'], data['Columbia Valley'],
+                           data['Comox Valley'], data['Cowichan Valley'], data['Cranbrook'],
+                           data['Creston Valley'], data['Dawson Creek'], data['Elk Valley'],
+                           data['Fort St John'], data['Greater Vancouver'], data['Hazeltons'],
+                           data['Hope'], data['Kamloops'], data['Kelowna'], data['Kimberley'],
+                           data['Kitimat'], data['Merritt'], data['Mount Waddington'],
                            data['Nanaimo'], data['Pemberton Valley'], data['Port Alberni'],
-                           data['Port Edward'], data['Powell River'], data['Prince George'], 
+                           data['Port Edward'], data['Powell River'], data['Prince George'],
                            data['Prince Rupert'], data['Quesnel'], data['Revelstoke'],
-                           data['Salt Spring Island'], data['Shuswap'], data['Skeena'], 
+                           data['Salt Spring Island'], data['Shuswap'], data['Skeena'],
                            data['Smithers'], data['South Okanagan Similkameen'],
-                           data['Squamish'], data['Sunshine Coast'], data['Terrace'], 
-                           data['Vernon'], data['Victoria'], data['West Kootenay'], 
+                           data['Squamish'], data['Sunshine Coast'], data['Terrace'],
+                           data['Vernon'], data['Victoria'], data['West Kootenay'],
                            data['Whistler'], data['Williams Lake'])
     # Save or print output
     if not os.path.exists(CWD + OUTPUT_DIR):
@@ -98,37 +100,37 @@ def performPostHocAnalysis(m_data, string):
      posthoc = pairwise_tukeyhsd(m_data['value'], m_data['variable'], alpha=0.05)
      figure = posthoc.plot_simultaneous(xlabel=f'Sampled Mean {string.replace("_", " ")}',
                                      ylabel='city', figsize=(20, 15))
-     
+
      # Check if there is an output director and save csv file to it
      if not os.path.exists(CWD + OUTPUT_DIR):
          os.mkdir(CWD + OUTPUT_DIR)
      plt.savefig(CWD+OUTPUT_DIR+f'{string.lower()}_tukey_u_simultaneous_plot.png')
-     temp = pd.DataFrame(data=posthoc._results_table.data[1:], 
+     temp = pd.DataFrame(data=posthoc._results_table.data[1:],
                        columns=posthoc._results_table.data[0])
      temp.to_csv(CWD+OUTPUT_DIR+f'{string.lower()}_pairwise_tukeyhsd_result.txt')
-     
+
 
 # Function to find and plot residuals from linear regression and show normality
 # and find both mean and standard deviation of the produced residuals, outputing
 # information to appropriate files
 def plotResiduals(data1, data2, regression, string):
     data1['residuals'] = data2['value'] - (data1['value'] * regression.slope + regression.intercept)
-    
+
     norm_test_pval = stats.normaltest(data1['residuals']).pvalue
     resid_mean = np.mean(data1['residuals'])
     resid_std = np.std(data1['residuals'])
-    
+
     output_string = (f'Residual info:\n'
                      + f' - Normal test p-value = {norm_test_pval}\n'
                      + f' - Residuals mean = {resid_mean}\n'
                      + f' - Residual standard deviation = {resid_std}')
-    
+
     plot = plt.figure(figsize=(15, 12))
     plt.hist(data1['residuals'], bins=25)
     plt.title('Histogram of Residuals For Linear Regression Model')
     plt.xlabel('Difference between predicted and observed values')
     plt.ylabel('Count')
-    
+
     if not os.path.exists(CWD + OUTPUT_DIR):
         os.mkdir(CWD + OUTPUT_DIR)
     plt.savefig(CWD + OUTPUT_DIR + f'{string.lower()}_residual_hist.png')
@@ -157,18 +159,20 @@ def performLinearRegression(data1, data2, string):
     if not os.path.exists(CWD + OUTPUT_DIR):
         os.mkdir(CWD + OUTPUT_DIR)
     plt.savefig(CWD + OUTPUT_DIR + f'{string.lower()}_linear_regression.png')
-    
+
     plotResiduals(data1, data2, regression, string)
 
-# Main function 
+# Main function
 def main():
     # Set Seaborn for future outputs
     seaborn.set_theme()
-    
+
     print('Please wait while the analysis is performed...')
     # Read in files
-    dist_data = pd.read_csv(CWD + SAMPLES_DIR + 'sampled_dist_data.csv')
-    speed_data = pd.read_csv(CWD + SAMPLES_DIR + 'sampled_speed_data.csv')
+    # dist_data = pd.read_csv(CWD + SAMPLES_DIR + 'sampled_dist_data.csv')
+    dist_data = pd.read_csv(os.path.join(CWD, SAMPLES_DIR, 'sampled_dist_data.csv'))
+    # speed_data = pd.read_csv(CWD + SAMPLES_DIR + 'sampled_speed_data.csv')
+    speed_data = pd.read_csv(os.path.join(CWD, SAMPLES_DIR, 'sampled_speed_data.csv'))
     createHistograms(dist_data, DIST_STRING)
     createHistograms(speed_data, SPEED_STRING)
     melted_dist_data = pd.DataFrame()
@@ -187,14 +191,14 @@ def main():
         print(f' - ANOVA p-value < 0.05 for {SPEED_STRING.replace("_", " ")}, '
               + 'we can conclude there is a difference between means of the city distances')
         melted_speed_data = pd.melt(speed_data)
-        performPostHocAnalysis(melted_speed_data, SPEED_STRING)   
+        performPostHocAnalysis(melted_speed_data, SPEED_STRING)
     else:
         print(f'Because ANOVA p-value > 0.05 for {SPEED_STRING.replace("_", " ")}, '
               + 'we cannot conclude there is a difference between means of the city distances')
-        
+
     performLinearRegression(melted_dist_data, melted_speed_data, 'Distance_and_Speed')
-    
+
     print(f'Finished, output filed saved to {OUTPUT_DIR}')
-    
+
 if __name__ == '__main__':
     main()

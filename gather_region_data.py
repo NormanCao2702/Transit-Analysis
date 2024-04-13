@@ -9,7 +9,7 @@
 # [2] Gets city from file name
 # [3] Create dataframes of sampled distances traveled and avg speeds
 # [4] Save wanted/more usable data to a csv file in an output directory
-# Data files in 'city_stop_data_files' was manually downloaded from the 
+# Data files in 'city_stop_data_files' was manually downloaded from the
 # following sources, and partly seperated for storage needs:
 # - https://www.bctransit.com/open-data/
 # - https://www.translink.ca/about-us/doing-business-with-translink/app-developer-resources/gtfs/gtfs-data
@@ -21,15 +21,17 @@ import numpy as np
 from datetime import datetime, timedelta
 
 # Directories holding raw data
-STOP_TIME_DIR = '\\city_stop_data_files\\stop_times\\'
-OUTPUT_DIR = '\\gathered_region_data\\'
+# STOP_TIME_DIR = '\\city_stop_data_files\\stop_times\\'
+# OUTPUT_DIR = '\\gathered_region_data\\'
+STOP_TIME_DIR = 'city_stop_data_files/stop_times'
+OUTPUT_DIR = 'gathered_region_data'
 CWD = os.getcwd()
 
-# Function used to calculate the schedualed wait times between departures at 
-# stops. Returns time difference if next stop id and trip id is the same as 
+# Function used to calculate the schedualed wait times between departures at
+# stops. Returns time difference if next stop id and trip id is the same as
 # current
 def calcWaitTime(nextTime, curTime):#, nextTrip, curTrip):
-    
+
     diff = nextTime - curTime
     return diff.total_seconds()
     return np.NaN
@@ -65,16 +67,31 @@ getHrs = np.vectorize(getHrs, otypes=[np.float64])
 # Main function
 def main():
     print('Please wait while data is cleaned and saved to a more usable form...')
+    stop_time_path = os.path.join(CWD, STOP_TIME_DIR)
+    output_dir_path = os.path.join(CWD, OUTPUT_DIR)
+
     # from the data with cities as column names
+    # Check if the stop_time_path exists
+    if not os.path.exists(stop_time_path):
+        print(f"Error: Directory not found: {stop_time_path}")
+        return
+
+    # Check if there is an output directory and create if it does not exist
+    if not os.path.exists(output_dir_path):
+        os.makedirs(output_dir_path)
     sampled_dist_data = pd.DataFrame()
     sampled_speed_data = pd.DataFrame()
     # Iterate files
-    for file in os.listdir(CWD + STOP_TIME_DIR):
+    # for file in os.listdir(CWD + STOP_TIME_DIR):
+    for file in os.listdir(stop_time_path):
         # Get city name from filename
+        # city = getCity(file)
+        file_path = os.path.join(stop_time_path, file)  # Corrected path using os.path.join for files
         city = getCity(file)
         print(f' - Cleaning and Re-organizing Data for {city}')
         # Get data from csv and put into pandas dataframe
-        temp_timing = pd.read_csv(CWD+STOP_TIME_DIR+file)
+        # temp_timing = pd.read_csv(CWD+STOP_TIME_DIR+file)
+        temp_timing = pd.read_csv(file_path)
         # A series of samples used later for ANOVA test and tukey-u (per city)
         dist_samples = pd.Series()
         speed_samples = pd.Series()
@@ -87,7 +104,7 @@ def main():
         # Turn column 'arrival_time' to datetime object
         temp_timing['arrival_time'] = getTime(temp_timing['arrival_time'])
         temp_timing['departure_time'] = getTime(temp_timing['departure_time'])
-        
+
         # Get only rows with routw beginnig
         temp_beginning = temp_timing.loc[temp_timing.groupby(['trip_id'])['shape_dist_traveled'].idxmin()]
         # Remove unneeded column
@@ -98,18 +115,18 @@ def main():
         # Remove unneeded column
         temp_end = temp_end.drop(columns=['departure_time'])
         # Merge needed information into single dataFrame
-        temp_dist = temp_beginning.merge(temp_end[['arrival_time', 'trip_id', 'shape_dist_traveled']], 
+        temp_dist = temp_beginning.merge(temp_end[['arrival_time', 'trip_id', 'shape_dist_traveled']],
                                          how='inner', on='trip_id')
         # Sort for visual checks - remove at later time
         temp_dist = temp_dist.sort_values(['trip_id'], ignore_index=True)
-        
+
         # Find time difference between start and end of route
         temp_dist['time_diff'] = temp_dist['arrival_time'] - temp_dist['departure_time']
         # Convert Difference to hours
         temp_dist['time_diff'] = getHrs(temp_dist['time_diff'])
         # Calculate average speed drivers need to sustain to meet deadline
         temp_dist['avg_speed'] = temp_dist['shape_dist_traveled'] / temp_dist['time_diff']
-        
+
         # Create samples
         for i in range(61):
             sample = temp_dist.sample(n=2, replace=False)
@@ -121,14 +138,16 @@ def main():
             speed_samples = pd.concat([speed_samples, pd.Series([speed_mean])])
         sampled_dist_data[city] = dist_samples
         sampled_speed_data[city] = speed_samples
-        
-        
+
+
     # Check if there is an output director and save csv file to it
     if not os.path.exists(CWD + OUTPUT_DIR):
         os.mkdir(CWD + OUTPUT_DIR)
-    sampled_dist_data.to_csv(CWD + OUTPUT_DIR + 'sampled_dist_data.csv', index=False)
-    sampled_speed_data.to_csv(CWD + OUTPUT_DIR + 'sampled_speed_data.csv', index=False)
-    
+    # sampled_dist_data.to_csv(CWD + OUTPUT_DIR + 'sampled_dist_data.csv', index=False)
+    # sampled_speed_data.to_csv(CWD + OUTPUT_DIR + 'sampled_speed_data.csv', index=False)
+    sampled_dist_data.to_csv(os.path.join(output_dir_path, 'sampled_dist_data.csv'), index=False)
+    sampled_speed_data.to_csv(os.path.join(output_dir_path, 'sampled_speed_data.csv'), index=False)
+
     print('...Finished cleaning data')
 
 
